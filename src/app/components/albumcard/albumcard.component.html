@@ -1,0 +1,74 @@
+<div class="card album-card" style="width: 200px; cursor: pointer;" (click)="onAlbumClick()">
+    <div class="card-img-top album-cover" style="height: 150px; background-color: #f8f9fa;">
+        <div class="d-flex align-items-center justify-content-center h-100" style="color: #6c757d;">
+            <i class="fas fa-images fa-3x"></i>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <h6 class="card-title mb-0">{{ album.name }}</h6>
+            <small class="text-muted">{{ formatSize(album.size) }}</small>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <small class="text-muted">{{ formatDate(album.updatedAt) }}</small>
+            <div class="action-icons">
+                <i class="fa-solid fa-pencil me-4" 
+                    style="cursor: pointer;" 
+                    data-bs-toggle="modal"
+                    attr.data-bs-target="#modal{{ album.id }}"
+                    (click)="openEditModal()"
+                    title="Edit"></i>
+                <i class="fa-solid fa-trash" 
+                    style="cursor: pointer;" 
+                    (click)="deleteAlbum(); $event.stopPropagation()" 
+                    title="Delete"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div
+  class="modal"
+  id="modal{{ album.id }}"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-centered"
+    role="document"
+    style="max-width: fit-content"
+  >
+    <div class="modal-content" style="width: auto">
+      <div class="modal-body">
+        <div>
+          <form id="form{{ album.id }}">
+            <div class="form-group">
+              <label for="">Name</label>
+              <input
+                type="text"
+                id="name{{ album.id }}"
+                class="form-control"
+                name="name"
+                [(ngModel)]="editAlbumName"
+                placeholder="Enter album name"
+                required
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+          (click)="updateAlbum(album.id)"
+        >
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

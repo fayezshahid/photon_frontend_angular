@@ -1,0 +1,104 @@
+<div class="d-flex justify-content-between">
+  <div class="dropdown d-flex">
+    <div>
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" 
+              data-bs-toggle="dropdown" aria-expanded="false">
+        Arrange by
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+        <li><button class="dropdown-item" (click)="arrangeBy('Date', 'desc')" type="button">Date</button></li>
+        <li><button class="dropdown-item" (click)="arrangeBy('Name', 'desc')" type="button">Name</button></li>
+        <li><button class="dropdown-item" (click)="arrangeBy('Size', 'desc')" type="button">Size</button></li>
+      </ul>
+    </div>
+    <div id="arrangByIcon" style="margin-left: 20px; margin-top: 5px; cursor: pointer;" 
+         [innerHTML]="arrangeByIconHtml" (click)="toggleOrder()">
+    </div>
+  </div>
+  <button data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-outline-primary" 
+          style="width: 100px">See Pairs</button>
+</div>
+
+<div class="modal" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="input-group">
+          <input type="search" id="emailSearch" class="form-control" 
+                 [(ngModel)]="searchValue" (input)="search($event)">
+        </div>
+        <nav class="nav nav-pills nav-fill mt-3">
+          <a class="nav-link" [class.active]="activeTab === 'users'" 
+             (click)="seeUsers()" style="height: 23px; padding: 0; font-size: 14px; cursor: pointer">
+             Send Request
+          </a>
+          <a class="nav-link" [class.active]="activeTab === 'friends'" 
+             (click)="seeFriends()" style="height: 23px; padding: 0; font-size: 14px; cursor: pointer">
+             Friends
+          </a>
+          <a class="nav-link" [class.active]="activeTab === 'requests'" 
+             (click)="seeRequests()" style="height: 23px; padding: 0; font-size: 14px; cursor: pointer">
+             See Requests
+          </a>
+        </nav>
+        
+        <div class="mt-3" id="users" style="padding: 0 30px;" [style.display]="activeTab === 'users' ? 'block' : 'none'">
+          <div *ngFor="let user of filteredUsers" class="d-flex justify-content-between align-items-center">
+            <div>{{ user.email }}</div>
+            <div>
+              <button class="btn" (click)="requestsSent.includes(user.id) ? deleteRequest(user.id) : sendRequest(user.id)">
+                <i class="fa-solid" [ngClass]="requestsSent.includes(user.id) ? 'fa-xmark' : 'fa-plus'"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-3" id="friends" style="padding: 0 30px;" [style.display]="activeTab === 'friends' ? 'block' : 'none'">
+          <div *ngFor="let friend of filteredFriends" class="d-flex justify-content-between align-items-center">
+            <div>{{ friend.email }}</div>
+            <div>
+              <button class="btn" (click)="removeFriend(friend.id)">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-3" id="requests" style="padding: 0 30px;" [style.display]="activeTab === 'requests' ? 'block' : 'none'">
+          <div *ngFor="let request of filteredRequests" class="d-flex justify-content-between align-items-center">
+            <div>{{ request.email }}</div>
+            <div>
+              <button class="btn" (click)="rejectRequest(request.id)">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+              <button class="btn" (click)="acceptRequest(request.id)">
+                <i class="fa-solid fa-check"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <div class="row mb-5" id="row">
+    <div *ngFor="let image of sharedImages" class="col-auto" style="margin-bottom: 15px;">
+      <div class="card">
+        <img class="card-img-top" height="320px" [src]="image.image">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 *ngIf="image.name" class="card-title" style="margin-bottom: 0">{{ image.name }}</h5>
+            <a (click)="removeSharedImage(image.user_id, image.id)">
+              <i class="fa-solid fa-trash"></i>
+            </a>
+          </div>
+          <div class="mt-3" style="font-size: 14px">
+            <b>Shared By: </b> <span>{{ image.userEmail }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

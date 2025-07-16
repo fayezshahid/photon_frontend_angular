@@ -1,0 +1,7 @@
+.auth-background {
+  background-image: url('/assets/background.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+}

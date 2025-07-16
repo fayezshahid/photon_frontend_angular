@@ -1,0 +1,147 @@
+<div class="d-flex justify-content-between">
+  <div class="dropdown d-flex">
+    <div>
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="dropdownMenu2"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        Arrange by
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+        <li>
+          <button
+            class="dropdown-item"
+            (click)="arrangeBy('date', 'desc')"
+            type="button"
+          >
+            Date
+          </button>
+        </li>
+        <li>
+          <button
+            class="dropdown-item"
+            (click)="arrangeBy('name', 'desc')"
+            type="button"
+          >
+            Name
+          </button>
+        </li>
+        <li>
+          <button
+            class="dropdown-item"
+            (click)="arrangeBy('size', 'desc')"
+            type="button"
+          >
+            Size
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div
+      id="arrangByIcon"
+      style="margin-left: 20px; margin-top: 5px; cursor: pointer"
+    >
+      <div (click)="arrangeBy(arrange, order == 'asc' ? 'desc' : 'asc')">
+        <i
+          [ngClass]="
+            order === 'asc' ? 'fa-solid fa-arrow-up' : 'fa-solid fa-arrow-down'
+          "
+        ></i>
+        <b> {{ arrange.charAt(0).toUpperCase() + arrange.slice(1) }}</b>
+      </div>
+    </div>
+  </div>
+  <button
+    data-bs-toggle="modal"
+    data-bs-target="#modal"
+    class="btn btn-outline-primary"
+    style="width: 100px"
+  >
+    Upload
+  </button>
+</div>
+
+<div
+  class="modal"
+  id="modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-centered"
+    role="document"
+    style="max-width: fit-content"
+  >
+    <div class="modal-content" style="width: auto">
+      <div class="modal-body">
+        <div>
+          <form id="form">
+            <div class="text-danger mb-1" id="imageError"></div>
+            <div
+              class="form-group"
+              style="margin-bottom: 15px"
+              id="chooseImg"
+              [hidden]="imageUrl"
+            >
+              <label for="">Image</label>
+              <input
+                type="file"
+                id="image"
+                class="form-control"
+                name="image"
+                (change)="showImage($event)"
+              />
+            </div>
+            <div [hidden]="!imageUrl">
+              <div class="d-flex justify-content-between" id="imageDiv">
+                <img id="img" [src]="imageUrl" alt="" />
+                <button
+                  type="button"
+                  class="btn-close"
+                  (click)="removeImage()"
+                ></button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="">Name (Optional)</label>
+              <input
+                type="text"
+                id="name"
+                class="form-control"
+                name="name"
+                placeholder="Enter a small description"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          (click)="upload()"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+        >
+          Upload
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <div class="row mb-5" id="row">
+    <app-photocard
+      *ngFor="let card of photoCards"
+      [photo]="card"
+      class="col-auto"
+      style="margin-bottom: 15px"
+      (imageEditted)="loadActivePhotos()"
+    ></app-photocard>
+  </div>
+</div>

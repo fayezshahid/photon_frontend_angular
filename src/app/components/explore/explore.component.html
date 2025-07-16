@@ -1,0 +1,132 @@
+<div class="d-flex justify-content-start align-items-center mb-4">
+  <!-- Search By Dropdown -->
+  <div style="margin-right: 25px">
+    <button
+      class="btn btn-secondary dropdown-toggle"
+      type="button"
+      id="dropdownMenu2"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      {{ searchBy }}
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+      <li>
+        <button
+          class="dropdown-item"
+          (click)="setSearchBy('Name')"
+          type="button"
+        >
+          Name
+        </button>
+      </li>
+      <li>
+        <button
+          class="dropdown-item"
+          (click)="setSearchBy('Date')"
+          type="button"
+        >
+          Date
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Search by Name -->
+  <div
+    id="searchByName"
+    [style.display]="showNameSearch ? 'flex' : 'none'"
+    style="width: 300px"
+    class="input-group input-group-sm"
+  >
+    <input
+      type="text"
+      id="name"
+      class="form-control"
+      [(ngModel)]="searchName"
+      placeholder="Enter name to search"
+      (keyup.enter)="searchByName()"
+    />
+    <button
+      (click)="searchByName()"
+      class="btn btn-sm btn-secondary"
+      style="width: 75px"
+    >
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+    <button
+      (click)="clearNameSearch()"
+      class="btn btn-sm btn-outline-secondary"
+      title="Clear search"
+    >
+      <i class="fa-solid fa-times"></i>
+    </button>
+  </div>
+
+  <!-- Search by Date -->
+  <div id="searchByDate" [style.display]="showDateSearch ? 'block' : 'none'">
+    <div class="d-flex align-items-center flex-wrap">
+      <div class="date-input-group">
+        <!-- <label for="datepicker1" class="form-label">From</label> -->
+        <input
+          type="date"
+          id="datepicker1"
+          class="form-control form-control-sm"
+          [(ngModel)]="searchDateFrom"
+          style="width: 150px"
+        />
+      </div>
+      
+      <span class="mx-3 text-muted">to</span>
+      
+      <div class="date-input-group">
+        <!-- <label for="datepicker2" class="form-label">To</label> -->
+        <input
+          type="date"
+          id="datepicker2"
+          class="form-control form-control-sm"
+          [(ngModel)]="searchDateTo"
+          style="width: 150px"
+        />
+      </div>
+
+      <div class="button-group ms-3">
+        <button
+          (click)="searchByDate()"
+          class="btn btn-sm btn-secondary me-2"
+          style="height: 38px; width: 75px"
+        >
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <button
+          (click)="clearDateRange()"
+          class="btn btn-sm btn-outline-secondary"
+          style="height: 38px"
+          title="Clear dates"
+        >
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Results Section -->
+<div class="container mt-5">
+  <div class="row mb-5" id="row">
+    <div class="col-12 mb-3" *ngIf="photoCards.length === 0">
+      <div class="alert alert-info text-center">
+        <i class="fa-solid fa-search me-2"></i>
+        No photos found matching your search criteria.
+      </div>
+    </div>
+    <app-photocard
+      *ngFor="let card of photoCards"
+      [photo]="card"
+      class="col-auto"
+      style="margin-bottom: 15px"
+      (imageEditted)="onImageEdited()"
+    ></app-photocard>
+  </div>
+</div>

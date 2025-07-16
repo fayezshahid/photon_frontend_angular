@@ -1,0 +1,134 @@
+<div class="d-flex justify-content-between">
+  <div class="dropdown d-flex">
+    <div>
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="dropdownMenu2"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        Arrange by
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenu2" id="arrangeAlbums">
+        <li>
+          <button
+            class="dropdown-item"
+            (click)="arrangeBy('date', 'desc')"
+            type="button"
+          >
+            Date
+          </button>
+        </li>
+        <li>
+          <button
+            class="dropdown-item"
+            (click)="arrangeBy('name', 'desc')"
+            type="button"
+          >
+            Alphabetical order
+          </button>
+        </li>
+        <li>
+          <button
+            class="dropdown-item"
+            (click)="arrangeBy('size', 'desc')"
+            type="button"
+          >
+            Size
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div
+      id="arrangByIcon"
+      style="margin-left: 20px; margin-top: 5px; cursor: pointer"
+    >
+      <div (click)="arrangeBy(arrange, order == 'asc' ? 'desc' : 'asc')">
+        <i
+          [ngClass]="
+            order === 'asc' ? 'fa-solid fa-arrow-up' : 'fa-solid fa-arrow-down'
+          "
+        ></i>
+        <b> {{ arrange.charAt(0).toUpperCase() + arrange.slice(1) }}</b>
+      </div>
+    </div>
+  </div>
+  <button
+    id="albumBtn"
+    data-bs-toggle="modal"
+    data-bs-target="#modal"
+    class="btn btn-outline-primary"
+    style="width: 100px"
+  >
+    + Album
+  </button>
+  <button
+    id="backBtn"
+    class="btn btn-outline-success"
+    style="width: 100px"
+    [style.display]="showBackButton ? 'block' : 'none'"
+    (click)="goBack()"
+  >
+    <- Back
+  </button>
+</div>
+
+<div
+  class="modal"
+  id="modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-centered"
+    role="document"
+    style="max-width: fit-content"
+  >
+    <div class="modal-content" style="width: auto">
+      <div class="modal-body">
+        <div>
+          <form #albumForm="ngForm" id="form">
+            <div class="form-group">
+              <label for="">Name</label>
+              <input
+                type="text"
+                id="name"
+                class="form-control"
+                name="name"
+                placeholder="Enter album name"
+                [(ngModel)]="albumName"
+                required
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="createAlbum()"
+          data-bs-dismiss="modal"
+        >
+          Create
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <div class="row mb-5" id="row">
+    <app-albumcard
+      *ngFor="let album of albums"
+      [album]="album"
+      class="col-auto"
+      style="margin-bottom: 15px"
+      (albumSelected)="onAlbumSelected($event)"
+      (albumEdited)="loadAlbums()"
+    ></app-albumcard>
+  </div>
+</div>

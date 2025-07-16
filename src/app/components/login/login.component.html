@@ -1,0 +1,75 @@
+<div class="auth-background">
+  <div class="container align-items-center">
+    <div class="row mt-5">
+      <div class="col-lg-4 bg-white m-auto rounded-top wrapper">
+        <h2 class="text-center pt-3">Login</h2>
+        <p class="text-center text-muted lead">Hello from the other side</p>
+
+        <!-- Error message display -->
+        <div class="alert alert-danger" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text"
+                ><i class="fa fa-envelope"></i
+              ></span>
+              <input
+                type="text"
+                class="form-control"
+                name="email"
+                [(ngModel)]="email"
+                placeholder="Email"
+                required
+                email
+                #emailModel="ngModel"
+              />
+            </div>
+            <div
+              class="text-danger"
+              *ngIf="emailModel.invalid && emailModel.touched"
+            >
+              Valid email is required
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa fa-lock"></i></span>
+              <input
+                type="password"
+                class="form-control"
+                name="password"
+                [(ngModel)]="password"
+                placeholder="Password"
+                required
+                #passwordModel="ngModel"
+              />
+            </div>
+            <div
+              class="text-danger"
+              *ngIf="passwordModel.invalid && passwordModel.touched"
+            >
+              Password is required
+            </div>
+          </div>
+
+          <div class="d-grid">
+            <button
+              type="submit"
+              class="btn btn-success"
+              [disabled]="loginForm.invalid"
+            >
+              Login
+            </button>
+            <p class="text-center mt-2">
+              Don't have an account? <a routerLink="/signup">Signup Now</a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

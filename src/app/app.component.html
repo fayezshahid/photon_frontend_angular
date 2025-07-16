@@ -1,0 +1,16 @@
+<!-- app.component.html -->
+<ng-container *ngIf="showFullLayout">
+  <app-navbar class="navbar navbar-light bg-dark fixed-top mb-3"></app-navbar>
+
+  <div class="d-flex flex-row" style="margin-top: 60px;">
+    <app-sidebar class="d-flex container bg-light" style="width:15%; min-height:100vh;"></app-sidebar>
+    <div class="main-content p-4" style="width:85%;">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</ng-container>
+
+<!-- Render only router-outlet when layout is hidden (like for /signup) -->
+<ng-container *ngIf="!showFullLayout">
+  <router-outlet></router-outlet>
+</ng-container>

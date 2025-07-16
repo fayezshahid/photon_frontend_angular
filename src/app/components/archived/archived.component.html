@@ -1,0 +1,69 @@
+<div class="d-flex justify-content-between">
+  <div class="dropdown d-flex">
+    <div>
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="dropdownMenu2"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        Arrange by
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+        <li>
+          <button
+            class="dropdown-item"
+            (click)="arrangeBy('date', 'desc')"
+            type="button"
+          >
+            Date
+          </button>
+        </li>
+        <li>
+          <button
+            class="dropdown-item"
+            (click)="arrangeBy('name', 'desc')"
+            type="button"
+          >
+            Name
+          </button>
+        </li>
+        <li>
+          <button
+            class="dropdown-item"
+            (click)="arrangeBy('size', 'desc')"
+            type="button"
+          >
+            Size
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div
+      id="arrangByIcon"
+      style="margin-left: 20px; margin-top: 5px; cursor: pointer"
+    >
+      <div (click)="arrangeBy(arrange, order == 'asc' ? 'desc' : 'asc')">
+        <i
+          [ngClass]="
+            order === 'asc' ? 'fa-solid fa-arrow-up' : 'fa-solid fa-arrow-down'
+          "
+        ></i>
+        <b> {{ arrange.charAt(0).toUpperCase() + arrange.slice(1) }}</b>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <div class="row mb-5" id="row">
+    <app-photocard
+      *ngFor="let card of photoCards"
+      [photo]="card"
+      class="col-auto"
+      style="margin-bottom: 15px"
+      (imageEditted)="loadArchivedPhotos()"
+    ></app-photocard>
+  </div>
+</div>
