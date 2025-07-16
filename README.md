@@ -23,8 +23,8 @@ Angular-based frontend for the Photon photo management platform. Features dynami
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/fayezshahid/photon-frontend.git
-   cd photon-frontend
+   git clone https://github.com/fayezshahid/photon_frontend_angular.git
+   cd photon_frontend_angular
    ```
 
 2. **Install Dependencies**
@@ -59,7 +59,7 @@ Angular-based frontend for the Photon photo management platform. Features dynami
 
 ## 📁 Project Structure
 ```
-photon-frontend/
+photon_frontend_angular/
 │
 ├── src/
 │   ├── app/
