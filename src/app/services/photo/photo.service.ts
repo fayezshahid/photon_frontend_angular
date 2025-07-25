@@ -14,6 +14,7 @@ export interface Photo {
   archived: boolean;
   inTrash: boolean;
   albumIds: number [] | null;
+  sharedWithFriendIds: number [] | null;
 }
 
 @Injectable({

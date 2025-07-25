@@ -145,8 +145,14 @@
           <div *ngFor="let friend of filteredShareFriends" class="d-flex justify-content-between align-items-center mb-2">
             <div>{{ friend.email }}</div>
             <div>
-              <button class="btn btn-sm btn-outline-primary" (click)="shareWithFriend(friend.id)">
-                <i class="fa-solid fa-share"></i> Share
+              <button 
+                class="btn btn-sm" 
+                [ngClass]="isSharedWith(friend.id) ? 'btn-outline-danger' : 'btn-outline-primary'" 
+                (click)="toggleShareWithFriend(friend.id)"
+                data-bs-dismiss="modal"
+                >
+                <i class="fa-solid" [ngClass]="isSharedWith(friend.id) ? 'fa-share-from-square' : 'fa-share'"></i>
+                {{ isSharedWith(friend.id) ? 'Unshare' : 'Share' }}
               </button>
             </div>
           </div>
@@ -178,14 +184,15 @@
           <div *ngFor="let album of filteredAlbums" class="d-flex justify-content-between align-items-center mb-2">
             <div>{{ album.name }}</div>
             <div>
-              <button class="btn btn-sm" 
-                      [ngClass]="photo.albumIds?.includes(album.id) ? 'btn-danger' : 'btn-outline-primary'"
-                      (click)="toggleAlbum(album.id)" 
-                      data-bs-dismiss="modal">
-                <i class="fa-solid" [ngClass]="photo.albumIds?.includes(album.id) ? 'fa-minus' : 'fa-plus'"></i>
-                {{ photo.albumIds?.includes(album.id) ? 'Remove' : 'Add' }}
+              <button
+                class="btn btn-sm"
+                [ngClass]="isInAlbum(album.id) ? 'btn-danger' : 'btn-outline-primary'"
+                (click)="toggleAlbum(album.id)"
+                data-bs-dismiss="modal"
+              >
+                <i class="fa-solid" [ngClass]="isInAlbum(album.id) ? 'fa-minus' : 'fa-plus'"></i>
+                {{ isInAlbum(album.id) ? 'Remove' : 'Add' }}
               </button>
-
             </div>
           </div>
           <div *ngIf="filteredAlbums.length === 0" class="text-center text-muted">

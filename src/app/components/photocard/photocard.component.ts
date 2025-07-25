@@ -4,17 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PhotoService, Photo } from '../../services/photo/photo.service';
 import { AlbumService, Album } from '../../services/album/album.service';
+import { PairsService, User as Friend } from '../../services/pair/pair.service';
+import { ShareService } from '../../services/share/share.service';
 import { IMAGE_UPLOAD_URL } from '../../constants/endpoints';
-
-interface Friend {
-  id: number;
-  email: string;
-}
-
-// interface Album {
-//   id: number;
-//   name: string;
-// }
 
 @Component({
   selector: 'app-photocard',
@@ -33,13 +25,7 @@ export class PhotoCardComponent {
   baseImageUrl: string = IMAGE_UPLOAD_URL;
   imageUrl: string | ArrayBuffer | null = null;
 
-  // Sample data for friends and albums
-  friends: Friend[] = [
-    { id: 1, email: 'friend1@example.com' },
-    { id: 2, email: 'friend2@example.com' },
-    { id: 3, email: 'friend3@example.com' }
-  ];
-
+  friends: Friend[] = [];
   albums!: Album[];
 
   // Search and filter properties
@@ -48,12 +34,17 @@ export class PhotoCardComponent {
   filteredShareFriends: Friend[] = [];
   filteredAlbums: Album[] = [];
 
-  constructor(private photoService: PhotoService, private albumService: AlbumService, private router: Router) {}
+  constructor(
+    private photoService: PhotoService,
+    private albumService: AlbumService,
+    private pairService: PairsService,
+    private shareService: ShareService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.imageUrl = this.baseImageUrl + this.photo.image;
-    // console.log('Photo URL:', this.imageUrl);
-    this.filteredShareFriends = [...this.friends];
+    
     this.albumService.getAlbums().subscribe({
       next: (data: Album[]) => {
         this.albums = data;
@@ -61,6 +52,18 @@ export class PhotoCardComponent {
       },
       error: (err) => {
         console.error('Failed to fetch albums', err);
+      }
+    });
+
+    this.pairService.getFriends().subscribe({
+      next: (friendsList: Friend[]) => {
+        this.friends = friendsList;
+        this.filteredShareFriends = [...this.friends];
+      },
+      error: (error) => {
+        console.error('Failed to fetch friends', error);
+        this.friends = [];
+        this.filteredShareFriends = [];
       }
     });
   }
@@ -211,8 +214,45 @@ export class PhotoCardComponent {
     }
   }
 
-  isInAlbum(): boolean {
-    return this.photo.albumIds !== null;
+  isInAlbum(albumId: number): boolean {
+    return this.photo.albumIds!.includes(albumId);
+  }
+
+  toggleShareWithFriend(friendId: number): void {
+    // console.log(`Toggling share with friend ID: ${friendId}`);
+    if (this.isSharedWith(friendId)) {
+      // Unshare
+      this.shareService.unshareImage(friendId, this.photo.id).subscribe({
+        next: () => {
+          this.showMessage(`Photo unshared with friend ID ${friendId}`, 'info');
+          this.imageEditted.emit(); // refresh if needed
+        },
+        error: (err) => {
+          console.error('Error unsharing image:', err);
+          this.showMessage('Failed to unshare photo', 'error');
+        }
+      });
+    } else {
+      // Share
+      this.shareService.shareImage(friendId, this.photo.id).subscribe({
+        next: () => {
+          this.showMessage(`Photo shared with friend ID ${friendId}`, 'success');
+          this.imageEditted.emit(); // refresh if needed
+        },
+        error: (err) => {
+          console.error('Error sharing image:', err);
+          this.showMessage('Failed to share photo', 'error');
+        }
+      });
+    }
+  }
+
+  isSharedWith(friendId: number): boolean {
+    if (!this.photo.sharedWithFriendIds) {
+      return false;
+    }
+
+    return this.photo.sharedWithFriendIds.includes(friendId);
   }
 
   // Helper method for showing message
