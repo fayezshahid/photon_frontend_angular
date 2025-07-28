@@ -35,4 +35,4 @@ jobs:
         
     - name: Deploy to S3
       run: |
-        aws s3 sync dist/ s3://photon-frontend-angular --delete
+        aws s3 sync dist/browser/ s3://photon-frontend-angular --delete
