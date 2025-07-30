@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   apiBaseUrl: 'https://api.photonapp.dev/api',
-  imageUploadUrl: 'https://photonapp.dev/images'
+  imageUploadUrl: '/images'
 };
