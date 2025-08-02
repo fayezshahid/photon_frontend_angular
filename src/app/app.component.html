@@ -14,3 +14,11 @@
 <ng-container *ngIf="!showFullLayout">
   <router-outlet></router-outlet>
 </ng-container>
+
+<ngx-spinner 
+  bdColor="rgba(0,0,0,0.8)" 
+  size="medium" 
+  color="#fff" 
+  type="ball-scale-multiple">
+  <p style="color: white; margin-top: 20px;">Loading...</p>
+</ngx-spinner>
